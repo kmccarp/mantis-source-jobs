@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import io.mantisrx.mql.jvm.core.Query;
 
 
-public class MQLQueryManager {
+public final class MQLQueryManager {
 
     static class LazyHolder {
 

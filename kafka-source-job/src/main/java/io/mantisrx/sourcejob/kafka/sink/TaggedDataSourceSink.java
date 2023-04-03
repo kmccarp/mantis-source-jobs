@@ -58,18 +58,17 @@ public class TaggedDataSourceSink implements Sink<TaggedData> {
     public void call(Context context, PortRequest portRequest,
                      Observable<TaggedData> observable) {
         observable = observable
-            .filter((t1) -> !t1.getPayload().isEmpty());
+            .filter(t1 -> !t1.getPayload().isEmpty());
         ServerSentEventsSink<TaggedData> sink = new ServerSentEventsSink.Builder<TaggedData>()
-            .withEncoder((data) -> {
+            .withEncoder(data -> {
                 try {
-                    String json = OBJECT_MAPPER.writeValueAsString(data.getPayload());
-                    return json;
+                    return OBJECT_MAPPER.writeValueAsString(data.getPayload());
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                     return "{\"error\":" + e.getMessage() + "}";
                 }
             })
-            .withPredicate(new Predicate<TaggedData>("description", new TaggedEventFilter()))
+            .withPredicate(new Predicate<>("description", new TaggedEventFilter()))
             .withRequestPreprocessor(preProcessor)
             .withRequestPostprocessor(postProcessor)
             .build();
